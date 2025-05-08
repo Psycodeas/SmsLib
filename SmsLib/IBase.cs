@@ -24,10 +24,10 @@ namespace SmsLib
         [DispId(5)]
         string DeleteSms(int id);
 
-        [DispId(6)]
-        string Greeting();
-
         [DispId(7)]
         void SetIp(string url);
+
+        [DispId(8)]
+        string Reset();
     }
 }

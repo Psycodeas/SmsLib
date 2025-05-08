@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 
-namespace SmsLib.Handler
+namespace SmsLib
 {
     internal class D100Request : IRequset
     {
@@ -96,6 +96,31 @@ namespace SmsLib.Handler
             {
                 return null;
             }
+        }
+
+        public string SetCookie(HttpResponseMessage response, HttpClient client)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool ValidateToken(string responseContent)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool IsSmsSent(string responseContent)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public HttpRequestMessage ResetDevice()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void GetDefaultHeaders(HttpClient client)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

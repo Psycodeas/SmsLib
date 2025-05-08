@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Administrator\\Desktop\\Sms Project\\Lib\\SmsLib\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{87A62007-F076-498B-AF78-FBA7EA90451B}|SmsLib\\SmsLib.csproj|c:\\users\\administrator\\desktop\\sms project\\lib\\smslib\\smslib\\i60g1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87A62007-F076-498B-AF78-FBA7EA90451B}|SmsLib\\SmsLib.csproj|solutionrelative:smslib\\i60g1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "I60G1.cs",
+              "DocumentMoniker": "C:\\Users\\Administrator\\Desktop\\Sms Project\\Lib\\SmsLib\\SmsLib\\I60G1.cs",
+              "RelativeDocumentMoniker": "SmsLib\\I60G1.cs",
+              "ToolTip": "C:\\Users\\Administrator\\Desktop\\Sms Project\\Lib\\SmsLib\\SmsLib\\I60G1.cs",
+              "RelativeToolTip": "SmsLib\\I60G1.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAA0wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T10:49:04.846Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

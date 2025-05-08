@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -13,11 +12,9 @@ namespace SmsLib
     [ComDefaultInterface(typeof(IBase))]
     public class I60G1 : IBase
     {
-        private SmsHandler smsHandler;
-        public I60G1()
-        {
-            smsHandler = new SmsHandler(new I60G1Props());
-        }
+        private Handler smsHandler;
+
+        public I60G1(){}
 
         ~I60G1()
         {
@@ -26,7 +23,7 @@ namespace SmsLib
 
         public void SetIp(string url)
         {
-            smsHandler.SetBaseUrl(url);
+            smsHandler = new Handler(new I60G1Request(url));
         }
 
         public string DeleteSms(int id)
@@ -112,7 +109,7 @@ namespace SmsLib
         {
             try
             {
-                return smsHandler.SendSms(Utils.NormalaizeNumber(number), message).GetAwaiter().GetResult().ToString();
+                return smsHandler.SendSms(message , Utils.NormalaizeNumber(number)).GetAwaiter().GetResult().ToString();
             }
             catch (Exception ex)
             {
@@ -120,9 +117,16 @@ namespace SmsLib
             }
         }
 
-        public string Greeting()
+        public string Reset()
         {
-            return "Hi";
+            try
+            {
+                return smsHandler.ResetDevice().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }

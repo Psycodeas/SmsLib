@@ -53,13 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handler\D100Request.cs" />
+    <Compile Include="Handler\Handler.cs" />
+    <Compile Include="Handler\I60G1Request.cs" />
+    <Compile Include="Handler\IRequset.cs" />
     <Compile Include="IBase.cs" />
     <Compile Include="I60G1.cs" />
-    <Compile Include="IModemProps.cs" />
-    <Compile Include="I60G1Props.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sms.cs" />
-    <Compile Include="SmsHandler.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

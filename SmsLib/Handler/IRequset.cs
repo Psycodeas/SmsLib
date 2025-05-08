@@ -1,28 +1,35 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 
-namespace SmsLib.Handler
+namespace SmsLib
 {
-    internal interface IRequset
+    public interface IRequset
     {
         //Default Headers
-        Dictionary<string, string> GetDefaultHeaders();
+        void GetDefaultHeaders(HttpClient client);
 
         //Login
         HttpRequestMessage LoginRequest(string username, string password);
 
         //Get All
         HttpRequestMessage GetAllSmsRequest();
-        HttpRequestMessage GetInboxRequest();
-        HttpRequestMessage GetOutboxRequest();
+        //HttpRequestMessage GetInboxRequest();
+        //HttpRequestMessage GetOutboxRequest();
 
         //Send
         HttpRequestMessage SendSms(string message, string destination);
 
         //Delete
         HttpRequestMessage DeleteSmsRequest(int id);
-        HttpRequestMessage DeleteInboxRequest(int id);
-        HttpRequestMessage DeleteOutboxRequest(int id);
-        string GetCookie(HttpResponseMessage response);
+        //HttpRequestMessage DeleteInboxRequest(int id);
+        //HttpRequestMessage DeleteOutboxRequest(int id);
+
+        string SetCookie(HttpResponseMessage response, HttpClient client);
+        bool ValidateToken(string responseContent);
+        bool IsSmsSent(string responseContent);
+
+        HttpRequestMessage ResetDevice();
+
+
     }
 }

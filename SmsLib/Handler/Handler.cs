@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Mime;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SmsLib.Handler
+namespace SmsLib
 {
-    internal class Handler
+    public class Handler
     {
         HttpClient client;
         HttpClientHandler httpHandler;
@@ -35,13 +29,18 @@ namespace SmsLib.Handler
             client = new HttpClient(httpHandler);
             client.DefaultRequestHeaders.ExpectContinue = false;
 
-            var headers = request.GetDefaultHeaders();
-            foreach (var header in headers)
-            {
-                client.DefaultRequestHeaders.Add(header.Key, header.Value);
-            }
+            request.GetDefaultHeaders(client);
+
 
             client.Timeout = TimeSpan.FromSeconds(10);
+        }
+
+        ~Handler()
+        {
+            client = null;
+            httpHandler = null;
+            inboxQueue = null;
+            request = null;
         }
 
         public async Task<string> Login(string username, string password)
@@ -58,9 +57,7 @@ namespace SmsLib.Handler
 
                 if (response.IsSuccessStatusCode) 
                 {
-                    var cookie = request.GetCookie(response);
-
-                    return "Success";
+                    return request.SetCookie(response, client);
                 }
                 else
                 {
@@ -72,7 +69,6 @@ namespace SmsLib.Handler
                 throw;
             }
         }
-
 
         public async Task<List<Sms>> GetAllSms()
         {
@@ -94,6 +90,8 @@ namespace SmsLib.Handler
                         list = Sms.SmsSerializerD100(content, "D");
                     }
                     
+                    SetAllSms(list);
+
                     return list;
                 }
                 else
@@ -106,7 +104,6 @@ namespace SmsLib.Handler
                 throw;
             }
         }
-
 
         private void SetAllSms(List<Sms> smsDatas)
         {
@@ -126,11 +123,117 @@ namespace SmsLib.Handler
                 });
             }
         }
-
-
-        public async Task<int> DeleteSms(int id)
+        
+        public Sms Dequeue()
         {
-            d
+            if (inboxQueue.TryDequeue(out Sms result))
+            {
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
+
+        public async Task<string> SendSms(string message, string phone)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request.SendSms(message,phone));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    if (request.ValidateToken(responseContent))
+                    {
+                        if(request.IsSmsSent(responseContent))
+                        {
+                            return "1";
+                        }
+                        else
+                        {
+                            return "0";
+                        }
+                    }
+                    else
+                    {
+                        await Login(username, password);
+                        return await SendSms(message, phone);
+                    }
+                }
+                else
+                {
+                    throw new HttpRequestException(response.StatusCode.ToString());
+                }
+            }
+            catch(Exception ex) 
+            {
+                throw ex;
+            }
+        }
+        public async Task<string> DeleteSms(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request.DeleteSmsRequest(id));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    if (request.ValidateToken(responseContent))
+                    {
+                        return "1";
+                    }
+                    else
+                    {
+                        await Login(username, password);
+                        return await DeleteSms(id);
+                    }
+                }
+                else
+                {
+                    throw new HttpRequestException(response.StatusCode.ToString());
+                }
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<string> ResetDevice()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request.ResetDevice());
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    if (request.ValidateToken(responseContent))
+                    {
+                        return "1";
+                    }
+                    else
+                    {
+                        await Login(username, password);
+                        return await ResetDevice();
+                    }
+                }
+                else
+                {
+                    throw new HttpRequestException(response.StatusCode.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
